@@ -1,4 +1,4 @@
-# Animal recognition in camera-trap images (Computer Vision 2026 project)
+# P16 — Wildlife Detection in Camera-Trap Images (Computer Vision 2026 project)
 
 Dataset: CCT20 subset of Caltech Camera Traps (LILA BC). Details: [docs/dataset_preparation.md](docs/dataset_preparation.md).
 

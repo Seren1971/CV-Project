@@ -5,9 +5,10 @@ side, while bounding boxes in the official JSON refer to the ORIGINAL resolution
 (width/height fields). `scaled_boxes` rescales them to the image actually on disk.
 
 Two modes:
-    CCT20Classification - one label per image (class of the largest box);
+    CCT20Detection      - main task: torchvision-style target dict (boxes in xyxy,
+                          labels). Empty frames give zero boxes (false-positive check).
+    CCT20Classification - auxiliary: one label per image (class of the largest box);
                           `crop=True` classifies the largest box crop instead.
-    CCT20Detection      - torchvision-style target dict (boxes in xyxy, labels).
 """
 from __future__ import annotations
 
@@ -52,6 +53,7 @@ class _Base(Dataset):
 class CCT20Classification(_Base):
     def __init__(self, *args, crop: bool = False, pad: float = 0.1, **kw):
         super().__init__(*args, **kw)
+        self.records = [r for r in self.records if r["boxes"]]  # no empty frames
         self.crop, self.pad = crop, pad
 
     def __getitem__(self, i):
@@ -75,7 +77,7 @@ class CCT20Detection(_Base):
         boxes = [[x, y, x + bw, y + bh] for x, y, bw, bh in scaled_boxes(rec, *img.size)]
         # label 0 is reserved for background in torchvision detectors
         labels = [self.class_to_idx[b["category"]] + 1 for b in rec["boxes"]]
-        target = {"boxes": torch.tensor(boxes, dtype=torch.float32),
+        target = {"boxes": torch.tensor(boxes, dtype=torch.float32).reshape(-1, 4),
                   "labels": torch.tensor(labels, dtype=torch.int64),
                   "image_id": rec["image_id"]}
         if self.transform:

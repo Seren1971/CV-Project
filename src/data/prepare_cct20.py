@@ -42,21 +42,34 @@ def load_split(ann_dir: Path, split: str) -> dict:
         return json.load(f)
 
 
-def to_records(coco: dict, keep: set[str]) -> list[dict]:
-    """One record per image with all its boxes; images without kept animals are dropped."""
+def to_records(coco: dict, keep: set[str], include_empty: bool = False) -> list[dict]:
+    """One record per image with all its boxes.
+
+    Images whose only labels are dropped classes are skipped. If include_empty,
+    images labelled `empty` are kept with no boxes (label "empty"): they are
+    needed to measure false detections on vegetation / background.
+    """
     cat_name = {c["id"]: c["name"].lower() for c in coco["categories"]}
     anns = defaultdict(list)
+    empty_ids, other_ids = set(), set()
     for a in coco["annotations"]:
         name = cat_name[a["category_id"]]
         if name in keep and a.get("bbox"):
             anns[a["image_id"]].append({"category": name, "bbox": [float(v) for v in a["bbox"]]})
+        elif name == "empty":
+            empty_ids.add(a["image_id"])
+        else:
+            other_ids.add(a["image_id"])
     records = []
     for img in coco["images"]:
         boxes = anns.get(img["id"])
-        if not boxes:
+        if boxes:
+            # image-level label = class of the largest box
+            main = max(boxes, key=lambda b: b["bbox"][2] * b["bbox"][3])["category"]
+        elif include_empty and img["id"] in empty_ids and img["id"] not in other_ids:
+            boxes, main = [], "empty"
+        else:
             continue
-        # image-level label for classification = class of the largest box
-        main = max(boxes, key=lambda b: b["bbox"][2] * b["bbox"][3])["category"]
         records.append({
             "image_id": img["id"],
             "file_name": img["file_name"],
@@ -122,6 +135,9 @@ def main() -> None:
     p.add_argument("--cap-train", type=int, default=0, help="max images/class in train (0 = all)")
     p.add_argument("--cap-eval", type=int, default=600, help="max images/class in val/test")
     p.add_argument("--with-cis-test", action="store_true")
+    p.add_argument("--no-empty-eval", action="store_true",
+                   help="do not add empty frames to val/test (they are added by default, "
+                        "capped like a class, to measure false detections)")
     p.add_argument("--seed", type=int, default=42)
     args = p.parse_args()
 
@@ -141,7 +157,8 @@ def main() -> None:
         wanted.pop("test_cis")
     splits = {}
     for ours, official in wanted.items():
-        recs = to_records(raw[official], keep)
+        recs = to_records(raw[official], keep,
+                          include_empty=(ours != "train" and not args.no_empty_eval))
         cap = args.cap_train if ours == "train" else args.cap_eval
         splits[ours] = cap_per_class(recs, cap, args.seed)
 
@@ -167,13 +184,15 @@ def main() -> None:
             for r in recs:
                 w.writerow([r["image_id"], r["file_name"], r["label"], r["location"],
                             r["seq_id"], len(r["boxes"]), r["multi_class"]])
-        cnt = Counter(r["label"] for r in recs)
+        img_cnt = Counter(r["label"] for r in recs)
+        box_cnt = Counter(b["category"] for r in recs for b in r["boxes"])
         stats_rows.append({
             "split": name, "images": len(recs),
+            "empty_images": img_cnt.get("empty", 0),
             "boxes": sum(len(r["boxes"]) for r in recs),
             "sequences": len({r["seq_id"] for r in recs}),
             "locations": len({r["location"] for r in recs}),
-            **{c: cnt.get(c, 0) for c in classes},
+            **{f"boxes_{c}": box_cnt.get(c, 0) for c in classes},
         })
 
     with open(args.out_dir / "split_stats.csv", "w", newline="") as f:
