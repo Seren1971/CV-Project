@@ -40,7 +40,7 @@ We then compute the same metrics on each condition subset (using the tags from `
 
 ## Error analysis
 
-Each detection above the threshold gets one label (`src/evaluate.py`), checked in this order:
+Each detection above the threshold gets one label, checked in this order:
 
 1. **Correct:** IoU ≥ 0.5 with a ground-truth box, right class.
 2. **Duplicate:** IoU ≥ 0.5 with a ground-truth box of the right class that another detection already matched.
