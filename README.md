@@ -10,6 +10,10 @@ The consolidated plan is in [docs/project_plan.md](docs/project_plan.md). Indivi
 
 Open [notebooks/baseline_kaggle.ipynb](notebooks/baseline_kaggle.ipynb) on Kaggle, set **Accelerator: GPU** and **Internet: On**, then *Run All*. It downloads the data, builds the splits, runs a smoke test, the COCO reference and baseline A, and saves `stage2_outputs.zip` (splits + results) to commit here.
 
+## One-click run on Windows (NVIDIA GPU)
+
+Double-click `run_baseline.bat`. It installs PyTorch with CUDA into `%USERPROFILE%\cv-p16-data\venv`, downloads CCT20 there, builds the splits and runs the smoke test, baseline A and the COCO reference. Re-running skips finished steps. Output: `results/`, `data/splits/`, `run_log.txt`. Same pipeline on any OS: `python scripts/run_all.py`.
+
 ## Setup (local)
 
 ```bash
