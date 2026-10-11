@@ -2,6 +2,10 @@
 
 Dataset: CCT20 subset of Caltech Camera Traps (LILA BC). Details: [docs/dataset_preparation.md](docs/dataset_preparation.md).
 
+## Project plan
+
+The consolidated plan is in [docs/project_plan.md](docs/project_plan.md). Individual sections: [scope](docs/project_scope.md), [dataset](docs/dataset_preparation.md), [implementation](docs/implementation_plan.md), [experiments](docs/experimental_plan.md), and [responsibilities](docs/team_responsibilities.md).
+
 ## Setup
 
 ```bash
