@@ -41,6 +41,8 @@ Camera traps record **bursts of near-identical frames** (sequences), and **each 
 2. Test images come only from **camera locations absent from training**, so the detector cannot rely on memorised backgrounds.
 3. `prepare_cct20.py` runs an automatic check and stops if any image, sequence, or train/test location is shared.
 
+**Finding:** the official CCT20 split is not sequence-clean. 224 bursts are cut between `train` and `cis_val` (for example, frames 1 and 3 of a burst are in `train` and frame 2 in `cis_val`), which affects 270 of the 3,484 `cis_val` images. Our check detected this on the first run. We remove these frames from our validation split; `train`, `cis_test` and `trans_test` share no sequences and are unchanged.
+
 ## Preprocessing
 
 - We use the resized "_sm" images (max 1024 px on the long side). The official boxes refer to the original resolution, so **boxes are rescaled to the actual image size** at loading time (`src/data/dataset.py`). Boxes are converted from COCO `[x, y, w, h]` to `[x1, y1, x2, y2]`.

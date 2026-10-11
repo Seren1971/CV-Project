@@ -156,9 +156,22 @@ def main() -> None:
     if not args.with_cis_test:
         wanted.pop("test_cis")
     splits = {}
-    for ours, official in wanted.items():
+    train_seqs: set[str] = set()
+    for ours, official in wanted.items():  # "train" comes first
         recs = to_records(raw[official], keep,
                           include_empty=(ours != "train" and not args.no_empty_eval))
+        if ours == "train":
+            # all frames of train sequences, including frames of dropped classes
+            train_seqs = {str(im.get("seq_id", im["id"])) for im in raw[official]["images"]}
+        else:
+            # The official CCT20 split cuts some bursts between `train` and `cis_val`
+            # (e.g. frames 1 and 3 in train, frame 2 in cis_val). Drop those frames
+            # from evaluation splits so no sequence is shared with train.
+            before = len(recs)
+            recs = [r for r in recs if r["seq_id"] not in train_seqs]
+            if len(recs) < before:
+                print(f"{ours}: removed {before - len(recs)} images whose sequence also "
+                      f"appears in train (official split cuts these bursts)")
         cap = args.cap_train if ours == "train" else args.cap_eval
         splits[ours] = cap_per_class(recs, cap, args.seed)
 
