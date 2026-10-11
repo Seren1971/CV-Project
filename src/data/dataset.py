@@ -71,15 +71,22 @@ class CCT20Classification(_Base):
 
 
 class CCT20Detection(_Base):
+    """`transform` is box-aware: transform(img, target) -> (img, target),
+    see src/data/transforms.py. Without a transform the image is a tensor."""
+
     def __getitem__(self, i):
         rec = self.records[i]
         img = self._load(rec)
-        boxes = [[x, y, x + bw, y + bh] for x, y, bw, bh in scaled_boxes(rec, *img.size)]
+        w, h = img.size
+        boxes = [[x, y, x + bw, y + bh] for x, y, bw, bh in scaled_boxes(rec, w, h)]
         # label 0 is reserved for background in torchvision detectors
         labels = [self.class_to_idx[b["category"]] + 1 for b in rec["boxes"]]
         target = {"boxes": torch.tensor(boxes, dtype=torch.float32).reshape(-1, 4),
                   "labels": torch.tensor(labels, dtype=torch.int64),
-                  "image_id": rec["image_id"]}
+                  "image_id": rec["image_id"], "size": (w, h)}
         if self.transform:
-            img = self.transform(img)
+            img, target = self.transform(img, target)
+        else:
+            from torchvision.transforms.functional import to_tensor
+            img = to_tensor(img)
         return img, target
