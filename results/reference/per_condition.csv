@@ -1,0 +1,9 @@
+mode,condition,value,images,animal_images,empty_images,recall,image_recall,precision,fp_per_empty_image
+agnostic,is_night,True,3046,2832,214,0.2184,0.2214,0.6957,0.028
+agnostic,is_night,False,2796,2408,388,0.5066,0.5174,0.7109,0.0206
+agnostic,is_dark,True,2147,1978,169,0.2268,0.2295,0.6725,0.0296
+agnostic,is_dark,False,3695,3262,433,0.4288,0.435,0.7166,0.0208
+agnostic,truncated,True,859,859,0,0.3116,0.3108,0.6799,nan
+agnostic,truncated,False,4983,4381,602,0.3644,0.3666,0.7106,0.0233
+agnostic,is_small,True,1007,1007,0,0.1794,0.1787,0.5927,nan
+agnostic,is_small,False,4835,4233,602,0.4025,0.4,0.7223,0.0233

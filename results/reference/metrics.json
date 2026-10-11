@@ -1,0 +1,21 @@
+{
+ "name": "COCO reference",
+ "test_split": "test",
+ "agnostic": {
+  "threshold_from_val": 0.35,
+  "images": 5842,
+  "animal_images": 5240,
+  "empty_images": 602,
+  "precision": 0.7059240865555162,
+  "recall": 0.3556111508220157,
+  "f1": 0.4729649435531788,
+  "fp_per_empty_image": 0.023255813953488372,
+  "empty_images_with_fp": 0.019933554817275746,
+  "image_recall": 0.35744274809160304,
+  "map50": 0.3772626369122305,
+  "map": 0.1834859817306777,
+  "ap50_per_class": {
+   "animal": 0.3772626369122305
+  }
+ }
+}

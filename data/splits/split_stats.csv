@@ -1,0 +1,5 @@
+split,images,empty_images,boxes,sequences,locations,boxes_bird,boxes_bobcat,boxes_cat,boxes_coyote,boxes_dog,boxes_opossum,boxes_rabbit,boxes_raccoon,boxes_rodent,boxes_skunk,boxes_squirrel
+train,11382,0,11891,4691,10,560,684,1170,1371,769,2514,2278,1030,264,214,1037
+val,2148,600,1644,819,10,61,90,168,197,105,353,331,126,46,20,147
+test,5842,602,5596,2471,9,180,611,676,638,721,606,625,642,24,273,600
+test_cis,6076,602,5936,2637,10,752,612,609,628,647,601,626,643,146,162,510

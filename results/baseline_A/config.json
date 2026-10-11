@@ -1,0 +1,32 @@
+{
+ "variant": "A",
+ "seed": 0,
+ "epochs": 6,
+ "batch_size": 4,
+ "lr": 0.01,
+ "warmup_iters": 500,
+ "train_fraction": 1.0,
+ "val_max": 1500,
+ "workers": 2,
+ "image_dir": "C:\\Users\\spesh\\cv-p16-data\\raw\\eccv_18_all_images_sm",
+ "splits_dir": "data/splits",
+ "no_pretrained": false,
+ "out": "C:\\Users\\spesh\\cv-p16-data\\runs\\A_s0",
+ "classes": [
+  "bird",
+  "bobcat",
+  "cat",
+  "coyote",
+  "dog",
+  "opossum",
+  "rabbit",
+  "raccoon",
+  "rodent",
+  "skunk",
+  "squirrel"
+ ],
+ "train_images": 11382,
+ "val_images": 1500,
+ "torch": "2.11.0+cu128",
+ "device": "cuda"
+}

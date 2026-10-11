@@ -1,0 +1,8 @@
+python 3.13.5 (Windows)
+torch 2.11.0+cu128
+torchvision 0.26.0+cu128
+numpy 2.5.2
+pillow 12.3.0
+GPU NVIDIA GeForce RTX 5070
+epochs 6, train_fraction 1.0, batch 4
+train minutes total 55.4

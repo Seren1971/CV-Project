@@ -31,7 +31,27 @@ Why this dataset fits the task:
 | test | `trans_test` | locations never seen in training | final metrics and failure analysis |
 | test_cis (optional) | `cis_test` | seen locations | measures the "new location" gap |
 
-Exact image and box counts per split and class are written to `data/splits/split_stats.csv` and will be added here after the first run.
+**Selected classes (11):** bird, bobcat, cat, coyote, dog, opossum, rabbit, raccoon, rodent, skunk, squirrel. Deer (41 training images), badger (5) and fox (5) fall below the 100-image threshold and are dropped.
+
+Actual counts after preparation (`data/splits/split_stats.csv`):
+
+| Split | Images | Empty images | Boxes | Sequences | Locations |
+|---|---|---|---|---|---|
+| train | 11,382 | 0 | 11,891 | 4,691 | 10 |
+| val | 2,148 | 600 | 1,644 | 819 | 10 |
+| test | 5,842 | 602 | 5,596 | 2,471 | 9 |
+| test_cis | 6,076 | 602 | 5,936 | 2,637 | 10 |
+
+Boxes per class:
+
+| Split | bird | bobcat | cat | coyote | dog | opossum | rabbit | raccoon | rodent | skunk | squirrel |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| train | 560 | 684 | 1,170 | 1,371 | 769 | 2,514 | 2,278 | 1,030 | 264 | 214 | 1,037 |
+| val | 61 | 90 | 168 | 197 | 105 | 353 | 331 | 126 | 46 | 20 | 147 |
+| test | 180 | 611 | 676 | 638 | 721 | 606 | 625 | 642 | 24 | 273 | 600 |
+| test_cis | 752 | 612 | 609 | 628 | 647 | 601 | 626 | 643 | 146 | 162 | 510 |
+
+Because sampling keeps whole sequences, some classes slightly exceed the nominal cap of 600 images. Some classes are rare in val or test (skunk: 20 val boxes; rodent: 24 test boxes), so their per-class AP is noisy.
 
 ### Leakage prevention
 
