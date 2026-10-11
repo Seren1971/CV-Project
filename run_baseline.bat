@@ -23,29 +23,29 @@ if errorlevel 1 (
 if exist "%VENV%\Scripts\python.exe" goto :run
 
 echo.
-echo [2] Finding Python 3.10-3.12...
+echo [2] Finding Python 3.10-3.13...
 set "PY="
-for %%V in (3.12 3.11 3.10) do (
+for %%V in (3.12 3.13 3.11 3.10) do (
   if not defined PY (
     py -%%V -c "import sys" >nul 2>&1 && set "PY=py -%%V"
   )
 )
 if not defined PY (
-  python -c "import sys; sys.exit(0 if (3,10)<=sys.version_info[:2]<=(3,12) else 1)" >nul 2>&1 && set "PY=python"
+  python -c "import sys; sys.exit(0 if (3,10)<=sys.version_info[:2]<=(3,13) else 1)" >nul 2>&1 && set "PY=python"
 )
 if not defined PY (
-  echo Python 3.10-3.12 not found. Install Python 3.12 from https://www.python.org/downloads/
+  echo Python 3.10-3.13 not found. Install Python 3.12 from https://www.python.org/downloads/
   echo ^(tick "Add python.exe to PATH"^) and run this file again.
   goto :fail
 )
 echo Using: %PY%
 
 echo.
-echo [3] Creating environment in %VENV% and installing PyTorch with CUDA (~3 GB, once)...
+echo [3] Creating environment in %VENV% and installing PyTorch with CUDA 12.8 (~3 GB, once; needed for RTX 50xx)...
 if not exist "%WORK%" mkdir "%WORK%"
 %PY% -m venv "%VENV%" || goto :fail
 "%VENV%\Scripts\python.exe" -m pip install --upgrade pip || goto :fail
-"%VENV%\Scripts\python.exe" -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126 || goto :fail
+"%VENV%\Scripts\python.exe" -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128 || goto :fail
 "%VENV%\Scripts\python.exe" -m pip install -r requirements.txt || goto :fail
 
 :run
