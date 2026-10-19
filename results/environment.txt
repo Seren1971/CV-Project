@@ -6,3 +6,5 @@ pillow 12.3.0
 GPU NVIDIA GeForce RTX 5070
 epochs 6, train_fraction 1.0, batch 4
 train minutes total 55.4
+
+stage 3 (2026-10-19): variant B, epochs 6, batch 4, python 3.13.5, torch 2.11.0+cu128, train minutes total 59.1

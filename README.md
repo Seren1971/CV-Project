@@ -63,5 +63,5 @@ src/data/    split preparation, condition tagging, PyTorch dataset, box-aware tr
 src/models/  Faster R-CNN builder
 src/         train.py, predict.py, evaluate.py, metrics.py
 data/        raw data (ignored) and prepared splits
-results/     metrics and figures (committed; summary: docs/stage2_baseline_results.md); runs/ holds checkpoints (ignored)
+results/     metrics and figures (committed; summaries: docs/stage2_baseline_results.md, docs/stage3_variant_B.md); runs/ holds checkpoints (ignored)
 ```

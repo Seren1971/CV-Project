@@ -1,0 +1,17 @@
+mode,condition,value,images,animal_images,empty_images,recall,image_recall,precision,fp_per_empty_image
+class_aware,is_night,True,3046,2832,214,0.6527,0.6571,0.6946,0.215
+class_aware,is_night,False,2796,2408,388,0.4998,0.5295,0.592,0.2603
+class_aware,is_dark,True,2147,1978,169,0.6603,0.6648,0.6732,0.2012
+class_aware,is_dark,False,3695,3262,433,0.5342,0.5582,0.6322,0.261
+class_aware,truncated,True,859,859,0,0.3565,0.3574,0.5023,nan
+class_aware,truncated,False,4983,4381,602,0.6246,0.6457,0.6708,0.2442
+class_aware,is_small,True,1007,1007,0,0.466,0.5194,0.6143,nan
+class_aware,is_small,False,4835,4233,602,0.6102,0.6173,0.6559,0.2442
+agnostic,is_night,True,3046,2832,214,0.8004,0.8065,0.7844,0.2991
+agnostic,is_night,False,2796,2408,388,0.6904,0.7089,0.7299,0.3041
+agnostic,is_dark,True,2147,1978,169,0.8047,0.8094,0.7507,0.2899
+agnostic,is_dark,False,3695,3262,433,0.7158,0.7327,0.7651,0.3072
+agnostic,truncated,True,859,859,0,0.6403,0.6484,0.7637,nan
+agnostic,truncated,False,4983,4381,602,0.7696,0.7838,0.7587,0.3023
+agnostic,is_small,True,1007,1007,0,0.5884,0.6167,0.7156,nan
+agnostic,is_small,False,4835,4233,602,0.7905,0.7961,0.7688,0.3023
