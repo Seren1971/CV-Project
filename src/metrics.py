@@ -121,9 +121,14 @@ def match_images(records: list[dict], preds: dict, classes: list[str], thr: floa
                 j = np.where(ok)[0][iou[d][ok].argmax()]
                 matched[j] = True
                 tp += 1
-        rows.append({"image_id": rec["image_id"], "empty": len(gb) == 0,
+        gt_cls = [b["category"] for b in rec["boxes"]]
+        rows.append({"image_id": rec["image_id"], "seq_id": rec.get("seq_id", rec["image_id"]),
+                     "empty": len(gb) == 0,
                      "n_gt": len(gb), "n_pred": len(keep), "tp": tp,
-                     "fp": len(keep) - tp, "fn": int((~matched).sum())})
+                     "fp": len(keep) - tp, "fn": int((~matched).sum()),
+                     # per ground-truth class: [matched, total]
+                     "by_class": {c: [sum(1 for k, cc in enumerate(gt_cls) if cc == c and matched[k]),
+                                      gt_cls.count(c)] for c in set(gt_cls)}})
     return rows
 
 

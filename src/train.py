@@ -1,4 +1,4 @@
-"""Fine-tune Faster R-CNN R50-FPN on CCT20 (baseline A).
+"""Fine-tune Faster R-CNN R50-FPN on CCT20 (baseline A or targeted-augmentation variant B).
 
     python -m src.train --variant A --epochs 20 --seed 0 --out runs/A_s0
     # quick first run (subset of train sequences, fewer epochs)
@@ -27,12 +27,12 @@ import torch
 from torch.utils.data import DataLoader, Subset
 
 from src.data.dataset import CCT20Detection
-from src.data.transforms import baseline_train, eval_transform
+from src.data.transforms import baseline_train, eval_transform, targeted_train
 from src.metrics import coco_map
 from src.models.detector import build_model, set_train_size
 from src.predict import collate, run_inference
 
-TRANSFORMS = {"A": baseline_train}
+TRANSFORMS = {"A": baseline_train, "B": targeted_train}
 
 
 def set_seed(seed: int):

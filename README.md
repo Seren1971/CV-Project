@@ -14,6 +14,10 @@ Open [notebooks/baseline_kaggle.ipynb](notebooks/baseline_kaggle.ipynb) on Kaggl
 
 Double-click `run_baseline.bat`. It installs PyTorch with CUDA into `%USERPROFILE%\cv-p16-data\venv`, downloads CCT20 there, builds the splits and runs the smoke test, baseline A and the COCO reference. Re-running skips finished steps. Output: `results/`, `data/splits/`, `run_log.txt`. Same pipeline on any OS: `python scripts/run_all.py`.
 
+## Stage 3: variant B (targeted augmentation)
+
+After the baseline run, double-click `run_stage3.bat` (or `python scripts/run_stage3.py`). It trains variant B with the same budget as A, evaluates A and B on `test` and `test_cis`, and writes `results/comparison_A_vs_B.md`. Description: [docs/stage3_variant_B.md](docs/stage3_variant_B.md).
+
 ## Setup (local)
 
 ```bash

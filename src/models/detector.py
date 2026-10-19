@@ -12,6 +12,7 @@ MAX_SIZE = 1024             # long side, same for every run
 EVAL_MIN_SIZE = 768         # shorter side at val/test time
 TRAIN_SCALES = {            # shorter side sampled per image during training
     "A": (640, 704, 768, 832, 896),
+    "B": (480, 576, 672, 768, 864, 960),   # wider range for small / distant animals
 }
 
 # COCO category ids of animals, used by the untrained reference model
