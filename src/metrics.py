@@ -126,6 +126,7 @@ def match_images(records: list[dict], preds: dict, classes: list[str], thr: floa
                      "empty": len(gb) == 0,
                      "n_gt": len(gb), "n_pred": len(keep), "tp": tp,
                      "fp": len(keep) - tp, "fn": int((~matched).sum()),
+                     "gt_matched": matched.tolist(),
                      # per ground-truth class: [matched, total]
                      "by_class": {c: [sum(1 for k, cc in enumerate(gt_cls) if cc == c and matched[k]),
                                       gt_cls.count(c)] for c in set(gt_cls)}})

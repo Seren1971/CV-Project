@@ -24,6 +24,8 @@ AP@0.5 per class (baseline A): opossum 0.919, skunk 0.859, coyote 0.817, raccoon
 
 ## Condition subsets (baseline A, per class, test)
 
+Image-level subsets: an image is selected if it contains at least one animal with the condition (night and darkness apply to the whole image); recall is computed over all animals in the selected images.
+
 | Condition | Subset | Images | Recall | Image recall | FP / empty image |
 |---|---|---|---|---|---|
 | Night (grayscale IR) | yes / no | 3,046 / 2,796 | 0.696 / 0.544 | 0.702 / 0.567 | 0.182 / 0.271 |
@@ -36,7 +38,7 @@ AP@0.5 per class (baseline A): opossum 0.919, skunk 0.859, coyote 0.817, raccoon
 1. **Fine-tuning helps a lot (H1 supported).** The untrained COCO model finds only 36% of the animals. It is very conservative (0.02 false positives per empty frame), but at night its recall falls to 0.22. After fine-tuning, class-agnostic mAP@0.5 rises from 0.38 to 0.83.
 2. **New locations hurt classification more than localisation.** Val (seen cameras) reaches mAP@0.5 = 0.90, while test reaches 0.60 per class but 0.83 class-agnostic. The model finds the animals but often confuses species at unseen cameras. Similar small or look-alike classes are the weakest: rodent (only 24 test boxes), bird, cat and squirrel. The `test_cis` split is prepared, so this gap can be measured cleanly against seen locations in the next stage.
 3. **Night is not the main problem for baseline A (H2 not supported so far).** Recall is higher on night IR frames (0.70) than on day frames (0.54), and night frames also produce fewer false alarms. Possible reasons to check: the IR flash lights up nearby animals against a dark, uniform background; daytime frames contain more vegetation, shadows and camouflage; and the night subset contains more nocturnal species (opossum, raccoon, skunk), which have the highest AP. A per-class night/day comparison is needed before drawing a conclusion.
-4. **Partial visibility and small animals are the clearest weaknesses (consistent with H3).** Recall drops from 0.67 to 0.39 for animals cut by the image border and to 0.43 for small animals.
+4. **Partial visibility and small animals are the clearest weaknesses (consistent with H3).** In images that contain an animal cut by the image border, recall over all animals is 0.39, versus 0.67 in the other images. In images that contain a small animal it is 0.43. These subsets are image-level; box-level numbers are in the stage-3 comparison.
 5. **False alarms on empty frames.** At the chosen threshold, 21% of empty frames get at least one false detection (0.24 per empty frame), and more often in daylight (0.27 vs 0.18 at night). These frames will be inspected to check whether vegetation is the cause.
 
 ## Limitations of this first run

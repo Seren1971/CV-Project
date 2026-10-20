@@ -18,10 +18,48 @@ from pathlib import Path
 
 import numpy as np
 
+from src.data.dataset import scaled_boxes
 from src.metrics import match_images
 
 CONDITIONS = [("is_night", "Night (IR)"), ("is_dark", "Dark"), ("truncated", "Truncated"),
               ("is_small", "Small")]
+SMALL_SHARE = 0.01     # same thresholds as src/data/tag_conditions.py
+BORDER_PX = 2
+
+
+def box_flags(rec: dict, size) -> list[dict]:
+    """Per ground-truth box: is it small / truncated? (box-level, not image-level)"""
+    w, h = size
+    out = []
+    for x, y, bw, bh in scaled_boxes(rec, w, h):
+        out.append({"small": bw * bh / (w * h) < SMALL_SHARE,
+                    "truncated": x <= BORDER_PX or y <= BORDER_PX
+                    or x + bw >= w - BORDER_PX or y + bh >= h - BORDER_PX})
+    return out
+
+
+def box_seq_table(recs, preds, rows_a, rows_b, flag, value):
+    """Per-sequence [tp_a, tp_b, n_gt] over boxes whose flag == value."""
+    agg = defaultdict(lambda: np.zeros(3))
+    for rec, ra, rb in zip(recs, rows_a, rows_b):
+        if not rec["boxes"]:
+            continue
+        flags = box_flags(rec, preds[rec["image_id"]]["size"])
+        a = agg[ra["seq_id"]]
+        for k, f in enumerate(flags):
+            if f[flag] == value:
+                a += [ra["gt_matched"][k], rb["gt_matched"][k], 1]
+    return np.array(list(agg.values())) if agg else np.zeros((0, 3))
+
+
+def box_recall_ci(t, n=1000, seed=0):
+    if len(t) < 2:
+        return None
+    rng = np.random.default_rng(seed)
+    s = rng.multinomial(len(t), np.full(len(t), 1 / len(t)), size=n) @ t
+    with np.errstate(invalid="ignore", divide="ignore"):
+        d = (s[:, 1] - s[:, 0]) / s[:, 2]
+    return tuple(np.nanpercentile(d, [2.5, 97.5]))
 
 
 def load_tags(path: Path) -> dict:
@@ -152,6 +190,17 @@ def main():
             L.append(f"| {label} | {s['n_gt']} | {f3(s['recall_a'])} | {f3(s['recall_b'])} | "
                      f"{delta(s['recall_b'], s['recall_a'], bootstrap(sub, args.n_boot).get('recall'))} | "
                      f"{f3(r['recall_a'] - s['recall_a'])} | {f3(r['recall_b'] - s['recall_b'])} |")
+        L += ["", "Note: the rows above are image-level subsets (all animals in images that contain at least "
+              "one animal with the condition). Box-level recall for the individual animals:", "",
+              "| Animals | Boxes | Recall A | Recall B | B - A [95% CI] | Other boxes: A | Other boxes: B |",
+              "|---|---|---|---|---|---|---|"]
+        for flag, label in [("small", "Small boxes (< 1% of image)"), ("truncated", "Truncated boxes (touch border)")]:
+            sub = box_seq_table(recs, pa, ra, rb, flag, True)
+            rest = box_seq_table(recs, pa, ra, rb, flag, False)
+            ss, rr = sub.sum(axis=0), rest.sum(axis=0)
+            L.append(f"| {label} | {int(ss[2])} | {f3(ss[0] / ss[2])} | {f3(ss[1] / ss[2])} | "
+                     f"{delta(ss[1] / ss[2], ss[0] / ss[2], box_recall_ci(sub, args.n_boot))} | "
+                     f"{f3(rr[0] / rr[2])} | {f3(rr[1] / rr[2])} |")
         L += ["", "False alarms on empty frames (FP per empty image):", "",
               "| Empty frames | Count | A | B | B - A [95% CI] |", "|---|---|---|---|---|"]
         for label, keep in [("all", lambda i: True),
