@@ -35,6 +35,8 @@ python scripts/demo.py --ckpt <path-to-best.pt> --images demo/images --out demo/
 
 Runs the detector on the committed sample images (or any folder of JPG/PNG), prints a
 detection table with inference time, and saves annotated images + `detections.json`.
+A pre-recorded 32-second video of this demo is in `demo/demo_video.mp4`
+(re-record with `scripts/make_demo_video.py`, requires `imageio imageio-ffmpeg`).
 Checkpoints are not stored in git (158 MB each); retrain with the commands below or use
 `p16_checkpoints_A_B.zip` from the team's shared storage.
 
