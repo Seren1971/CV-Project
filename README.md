@@ -37,6 +37,17 @@ Runs the detector on the committed sample images (or any folder of JPG/PNG), pri
 detection table with inference time, and saves annotated images + `detections.json`.
 A pre-recorded 32-second video of this demo is in `demo/demo_video.mp4`
 (re-record with `scripts/make_demo_video.py`, requires `imageio imageio-ffmpeg`).
+
+**Browser interface** (drop any photo, get the detections drawn on it):
+
+```bash
+python scripts/web_demo.py --ckpt <path-to-best.pt>   # opens http://127.0.0.1:8765
+```
+
+On Windows just double-click: **`run_model.bat`** (CLI: photo/folder → annotated output)
+or **`run_interface.bat`** (browser UI with drag & drop and a threshold slider).
+Both auto-detect the checkpoint (`models\Bp\best.pt`, `P16_CKPT` or the usual local
+paths) and the Python environment; pass a checkpoint path as the first argument to override.
 Checkpoints are not stored in git (158 MB each); retrain with the commands below or use
 `p16_checkpoints_A_B.zip` from the team's shared storage.
 
