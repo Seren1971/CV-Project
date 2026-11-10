@@ -8,3 +8,5 @@ epochs 6, train_fraction 1.0, batch 4
 train minutes total 55.4
 
 stage 3 (2026-10-19): variant B, epochs 6, batch 4, python 3.13.5, torch 2.11.0+cu128, train minutes total 59.1
+
+stage 4 (2026-11-10): A and B' at 12 epochs, batch 4, python 3.13.5, torch 2.11.0+cu128, train minutes: A12 115.3, B'12 117.5

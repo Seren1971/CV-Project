@@ -1,0 +1,96 @@
+{
+ "threshold": 0.9,
+ "taxonomy": {
+  "correct": 3184,
+  "class_confusion": 323,
+  "background_fp": 370,
+  "missed": 2089,
+  "gt": 5596
+ },
+ "cases": {
+  "missed_small": {
+   "image_id": "5938c1c1-23d2-11e8-a6a3-ec086b02610b",
+   "file_name": "5938c1c1-23d2-11e8-a6a3-ec086b02610b.jpg",
+   "n_gt": 2,
+   "n_pred": 1,
+   "missed_gt": 1,
+   "wrong_class": 1,
+   "tags": {
+    "is_night": "False",
+    "is_dark": "False",
+    "is_small": "True",
+    "truncated": "False"
+   }
+  },
+  "missed_truncated": {
+   "image_id": "59ac6a48-23d2-11e8-a6a3-ec086b02610b",
+   "file_name": "59ac6a48-23d2-11e8-a6a3-ec086b02610b.jpg",
+   "n_gt": 1,
+   "n_pred": 0,
+   "missed_gt": 1,
+   "wrong_class": 0,
+   "tags": {
+    "is_night": "True",
+    "is_dark": "False",
+    "is_small": "False",
+    "truncated": "True"
+   }
+  },
+  "class_confusion": {
+   "image_id": "597830ed-23d2-11e8-a6a3-ec086b02610b",
+   "file_name": "597830ed-23d2-11e8-a6a3-ec086b02610b.jpg",
+   "n_gt": 1,
+   "n_pred": 1,
+   "missed_gt": 0,
+   "wrong_class": 1,
+   "tags": {
+    "is_night": "True",
+    "is_dark": "True",
+    "is_small": "False",
+    "truncated": "True"
+   }
+  },
+  "false_positive": {
+   "image_id": "58c97dc3-23d2-11e8-a6a3-ec086b02610b",
+   "file_name": "58c97dc3-23d2-11e8-a6a3-ec086b02610b.jpg",
+   "n_gt": 0,
+   "n_pred": 1,
+   "missed_gt": 0,
+   "wrong_class": 0,
+   "tags": {
+    "is_night": "False",
+    "is_dark": "False",
+    "is_small": "False",
+    "truncated": "False"
+   }
+  },
+  "success_night": {
+   "image_id": "5a27d9ff-23d2-11e8-a6a3-ec086b02610b",
+   "file_name": "5a27d9ff-23d2-11e8-a6a3-ec086b02610b.jpg",
+   "n_gt": 2,
+   "n_pred": 2,
+   "missed_gt": 0,
+   "wrong_class": 0,
+   "tags": {
+    "is_night": "True",
+    "is_dark": "True",
+    "is_small": "False",
+    "truncated": "False"
+   }
+  },
+  "success_day": {
+   "image_id": "598de89e-23d2-11e8-a6a3-ec086b02610b",
+   "file_name": "598de89e-23d2-11e8-a6a3-ec086b02610b.jpg",
+   "n_gt": 2,
+   "n_pred": 2,
+   "missed_gt": 0,
+   "wrong_class": 0,
+   "tags": {
+    "is_night": "False",
+    "is_dark": "True",
+    "is_small": "False",
+    "truncated": "False"
+   }
+  }
+ }
+}

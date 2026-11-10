@@ -56,6 +56,54 @@ def border_crop_window(w: int, h: int, boxes: list, rng: random.Random = random)
     return None
 
 
+def border_crop_window_v2(w: int, h: int, boxes: list, rng: random.Random = random,
+                          min_visible: float = 0.15):
+    """Variant-B' border crop: keeps clipped boxes with >= `min_visible` area visible.
+
+    Same crop-window search as `border_crop_window`, but boxes that fall below
+    `min_visible` are not silently dropped: their visible fragment is returned in
+    `dropped` (window coordinates) so the caller can paint it out with background.
+    Returns (window, new_boxes, kept_indices, dropped_rects) or None.
+    """
+    cand = [i for i, b in enumerate(boxes) if b[2] - b[0] >= 8 and b[3] - b[1] >= 8]
+    if not cand:
+        return None
+    i = rng.choice(cand)
+    x1, y1, x2, y2 = boxes[i]
+    bw, bh = x2 - x1, y2 - y1
+    v = rng.uniform(MIN_VISIBLE, 0.8)            # visible share of the chosen box
+    sides = ["left", "right", "top", "bottom"]
+    rng.shuffle(sides)
+    for side in sides:
+        win = [0.0, 0.0, float(w), float(h)]
+        if side == "left":
+            win[0] = x2 - v * bw
+        elif side == "right":
+            win[2] = x1 + v * bw
+        elif side == "top":
+            win[1] = y2 - v * bh
+        else:
+            win[3] = y1 + v * bh
+        if win[2] - win[0] < MIN_CROP_SIDE * w or win[3] - win[1] < MIN_CROP_SIDE * h:
+            continue
+        win = [round(c) for c in win]
+        new_boxes, kept, dropped = [], [], []
+        for j, b in enumerate(boxes):
+            c = [max(b[0], win[0]), max(b[1], win[1]), min(b[2], win[2]), min(b[3], win[3])]
+            if c[2] - c[0] < 2 or c[3] - c[1] < 2:
+                continue
+            rect = [c[0] - win[0], c[1] - win[1], c[2] - win[0], c[3] - win[1]]
+            if area(c) < min_visible * area(b):
+                if j != i:
+                    dropped.append(rect)      # unlabeled fragment -> erase in the caller
+                continue
+            new_boxes.append(rect)
+            kept.append(j)
+        if i in kept:
+            return tuple(win), new_boxes, kept, dropped
+    return None
+
+
 def erase_rect(box, rng: random.Random = random, min_frac: float = 0.2, max_frac: float = 0.5):
     """Rectangle inside `box` covering 20-50% of its area (never the whole box)."""
     x1, y1, x2, y2 = box

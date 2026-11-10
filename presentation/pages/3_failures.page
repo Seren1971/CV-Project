@@ -1,0 +1,101 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+  - elementId: topbar
+    elementType: shape
+    bounds: [0, 0, 960, 6]
+    shapeName: rect
+    fill: {type: solid, color: "$primary"}
+  - elementId: title
+    elementType: text
+    bounds: [40, 20, 880, 30]
+    content:
+      style: "$title"
+      fontSize: 24
+      wrap: false
+      text: |
+        <p>Failure analysis and conclusions</p>
+  - elementId: montage
+    elementType: image
+    bounds: [40, 60, 620, 320]
+    src: media/montage.jpg
+    fit: {mode: contain}
+    border: {style: solid, width: 1, color: "#D5DDD8"}
+  - elementId: montage-cap
+    elementType: text
+    bounds: [40, 384, 620, 16]
+    content:
+      style: "$small"
+      wrap: false
+      text: |
+        <p>Final model B′ on test. Green = ground truth, red = correct-class prediction, orange = wrong class.</p>
+  - elementId: tax-h
+    elementType: text
+    bounds: [40, 410, 620, 20]
+    content:
+      style: "$h2"
+      wrap: false
+      text: |
+        <p>Error taxonomy (test, thresholded detections)</p>
+  - elementId: tax-t
+    elementType: text
+    bounds: [40, 434, 620, 90]
+    content:
+      style: "$body"
+      text: |
+        <ul>
+        <li><strong>82% correct</strong> · 8% class confusion (cat→coyote at night, close range, rear view)</li>
+        <li>10% background false positives (sun glare on water, moving vegetation)</li>
+        <li>37% of ground-truth animals missed — dominated by <strong>small rodents</strong> (AP ≈ 0.04) and extreme close-ups</li>
+        </ul>
+  - elementId: concl-h
+    elementType: text
+    bounds: [690, 60, 240, 20]
+    content:
+      style: "$h2"
+      wrap: false
+      text: |
+        <p>Conclusions</p>
+  - elementId: concl-t
+    elementType: text
+    bounds: [690, 84, 240, 240]
+    content:
+      style: "$body"
+      fontSize: 11.5
+      text: |
+        <ul>
+        <li>Fine-tuned Faster R-CNN: 0.61 mAP@0.5 on unseen locations (reference: 0.38)</li>
+        <li>Targeted augmentation works only with the right design <strong>and</strong> budget: B′ ≥ A everywhere it was designed to help</li>
+        <li>Night IR is not harder than day after fine-tuning — the gap is the species mix</li>
+        <li>New locations cost ~0.25 mAP — mostly species confusion</li>
+        </ul>
+  - elementId: lim-h
+    elementType: text
+    bounds: [690, 332, 240, 20]
+    content:
+      style: "$h2"
+      wrap: false
+      text: |
+        <p>Limitations</p>
+  - elementId: lim-t
+    elementType: text
+    bounds: [690, 356, 240, 120]
+    content:
+      style: "$small"
+      fontSize: 10.5
+      text: |
+        <ul>
+        <li>One seed per run; &lt;1 mAP point = noise</li>
+        <li>1024-px inputs lose small-animal detail</li>
+        <li>Package-level, not per-transform attribution</li>
+        </ul>
+  - elementId: demo-note
+    elementType: text
+    bounds: [40, 508, 880, 24]
+    content:
+      style: "$small"
+      wrap: false
+      text: |
+        <p>Live demo next: <strong>python scripts/demo.py --ckpt best.pt --images demo/images</strong> — 0.1 s/image on RTX 5070. Reproduce: run_baseline.bat / run_stage4.bat, github.com/Seren1971/CV-Project</p>

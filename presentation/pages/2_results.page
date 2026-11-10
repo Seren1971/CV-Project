@@ -1,0 +1,132 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+  - elementId: topbar
+    elementType: shape
+    bounds: [0, 0, 960, 6]
+    shapeName: rect
+    fill: {type: solid, color: "$primary"}
+  - elementId: title
+    elementType: text
+    bounds: [40, 20, 880, 30]
+    content:
+      style: "$title"
+      fontSize: 24
+      wrap: false
+      text: |
+        <p>Results: B′ matches the baseline overall, wins on small animals</p>
+  - elementId: tbl-cap
+    elementType: text
+    bounds: [40, 56, 560, 16]
+    content:
+      style: "$small"
+      wrap: false
+      text: |
+        <p>test = 5,842 images from 9 unseen locations · class-aware · thresholds chosen on val</p>
+  - elementId: results-table
+    elementType: table
+    bounds: [40, 76, 570, 168]
+    columnWidths: [0.30, 0.14, 0.14, 0.14, 0.14, 0.14]
+    rowHeights: [0.17, 0.166, 0.166, 0.166, 0.166, 0.166]
+    style: "$results"
+    rows:
+      - - text: "Model"
+        - text: "mAP@0.5"
+        - text: "Precision"
+        - text: "Recall"
+        - text: "F1"
+        - text: "FP/empty"
+      - - text: "COCO reference*"
+        - text: "0.377"
+        - text: "0.706"
+        - text: "0.356"
+        - text: "0.473"
+        - text: "0.023"
+      - - text: "A — 6 ep"
+        - text: "0.603"
+        - text: "0.701"
+        - text: "0.623"
+        - text: "0.660"
+        - text: "0.239"
+      - - text: "B — 6 ep"
+        - text: "0.560"
+        - text: "0.648"
+        - text: "0.580"
+        - text: "0.612"
+        - text: "0.244"
+      - - text: "A — 12 ep"
+        - text: "0.607"
+        - text: "0.821"
+        - text: "0.563"
+        - text: "0.668"
+        - text: "0.080"
+      - - text: "B′ — 12 ep"
+        - text: "0.609"
+        - text: "0.821"
+        - text: "0.569"
+        - text: "0.672"
+        - text: "0.115"
+  - elementId: tbl-note
+    elementType: text
+    bounds: [40, 250, 570, 30]
+    content:
+      style: "$small"
+      text: |
+        <p>*untrained, class-agnostic. Class-agnostic mAP@0.5: <strong>B′ 0.837</strong> vs A 0.820 (12 ep). Seen locations (test_cis): both 0.86 — the new-location gap is mostly species confusion.</p>
+  - elementId: curves
+    elementType: image
+    bounds: [40, 292, 570, 205]
+    src: media/training_curves.png
+    fit: {mode: contain}
+  - elementId: curves-cap
+    elementType: text
+    bounds: [40, 482, 570, 16]
+    content:
+      style: "$small"
+      wrap: false
+      text: |
+        <p>B′ (red) trains slower but reaches the best val mAP@0.5 (0.910) by epoch 9.</p>
+  - elementId: right-h
+    elementType: text
+    bounds: [640, 56, 290, 22]
+    content:
+      style: "$h2"
+      wrap: false
+      text: |
+        <p>Where B′ helps (recall)</p>
+  - elementId: right-t
+    elementType: text
+    bounds: [640, 82, 290, 200]
+    content:
+      style: "$body"
+      fontSize: 12
+      text: |
+        <ul>
+        <li><strong>Small animals: 0.416 vs 0.364</strong> (+5.2 pp, 95% CI excludes 0) — the gap to full-set recall shrinks 0.25 → 0.19</li>
+        <li>Truncated: 0.350 vs 0.333 (n.s.)</li>
+        <li>Night IR: 0.654 vs 0.647 (n.s.) — night is not the bottleneck after fine-tuning</li>
+        <li>Cost: +0.035 FP per empty frame (n.s.), day frames</li>
+        </ul>
+  - elementId: right-h2
+    elementType: text
+    bounds: [640, 292, 290, 22]
+    content:
+      style: "$h2"
+      wrap: false
+      text: |
+        <p>What 12 epochs fix</p>
+  - elementId: right-t2
+    elementType: text
+    bounds: [640, 318, 290, 190]
+    content:
+      style: "$body"
+      fontSize: 12
+      text: |
+        <ul>
+        <li>At 6 ep B <strong>lost</strong> 4.3 mAP — the budget, not the idea, was the problem</li>
+        <li>False alarms on empty frames ×3 lower: 0.24 → 0.08 per image</li>
+        <li>Share of correct detections: 70% → 82%</li>
+        <li>Final model: <strong>B′, 12 ep</strong></li>
+        </ul>

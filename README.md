@@ -1,12 +1,44 @@
 # P16 — Wildlife Detection in Camera-Trap Images (Computer Vision 2026 project)
 
+Detecting and classifying animals in camera-trap images on **unseen camera locations**.
 Dataset: CCT20 subset of Caltech Camera Traps (LILA BC). Details: [docs/dataset_preparation.md](docs/dataset_preparation.md).
 
-## Project plan
+**Final report:** [docs/final_summary.md](docs/final_summary.md) (two-page technical summary) · **Slides:** `presentation/` · **Demo:** `scripts/demo.py`
 
-The consolidated plan is in [docs/project_plan.md](docs/project_plan.md). Individual sections: [scope](docs/project_scope.md), [dataset](docs/dataset_preparation.md), [implementation](docs/implementation_plan.md), [experiments](docs/experimental_plan.md), and [responsibilities](docs/team_responsibilities.md).
+## Results at a glance
 
-## Quick start on Kaggle (recommended)
+Faster R-CNN R50-FPN (COCO weights), fine-tuned on CCT20. `test` = 5,842 images from camera locations never seen in training; thresholds chosen on val only.
+
+| Model | Epochs | mAP@0.5 | mAP@[.5:.95] | Precision | Recall | F1 | FP / empty image |
+|---|---|---|---|---|---|---|---|
+| COCO reference (untrained, class-agnostic) | – | 0.377 | 0.183 | 0.706 | 0.356 | 0.473 | 0.023 |
+| Baseline A (standard augmentation) | 6 | 0.603 | 0.367 | 0.701 | 0.623 | 0.660 | 0.239 |
+| Variant B (targeted augmentation) | 6 | 0.560 | 0.329 | 0.648 | 0.580 | 0.612 | 0.244 |
+| Baseline A | 12 | 0.607 | 0.367 | 0.821 | 0.563 | 0.668 | **0.080** |
+| **Variant B′ (fixed targeted augmentation)** | 12 | **0.609** | **0.368** | **0.821** | **0.569** | **0.672** | 0.115 |
+
+Class-agnostic (find any animal): B′ 12 ep reaches **0.837 mAP@0.5** vs 0.820 for A at the same
+budget, and significantly better recall on small animals (+5.2 points, 95 % CI excludes 0).
+
+Full tables, per-class AP, per-condition recall and 95 % bootstrap intervals:
+[results/comparison_A_vs_B.md](results/comparison_A_vs_B.md) (stage 3, 6 epochs) and
+[results/stage4/comparison_A12_vs_Bp12.md](results/stage4/comparison_A12_vs_Bp12.md) (stage 4, 12 epochs).
+Failure cases with images: `results/failure_cases/`. Report on stages:
+[docs/stage2_baseline_results.md](docs/stage2_baseline_results.md), [docs/stage3_variant_B.md](docs/stage3_variant_B.md),
+[docs/stage4_longer_training.md](docs/stage4_longer_training.md).
+
+## Live demo
+
+```bash
+python scripts/demo.py --ckpt <path-to-best.pt> --images demo/images --out demo/out
+```
+
+Runs the detector on the committed sample images (or any folder of JPG/PNG), prints a
+detection table with inference time, and saves annotated images + `detections.json`.
+Checkpoints are not stored in git (158 MB each); retrain with the commands below or use
+`p16_checkpoints_A_B.zip` from the team's shared storage.
+
+## Quick start on Kaggle (recommended for reproduction)
 
 Open [notebooks/baseline_kaggle.ipynb](notebooks/baseline_kaggle.ipynb) on Kaggle, set **Accelerator: GPU** and **Internet: On**, then *Run All*. It downloads the data, builds the splits, runs a smoke test, the COCO reference and baseline A, and saves `stage2_outputs.zip` (splits + results) to commit here.
 
@@ -18,11 +50,17 @@ Double-click `run_baseline.bat`. It installs PyTorch with CUDA into `%USERPROFIL
 
 After the baseline run, double-click `run_stage3.bat` (or `python scripts/run_stage3.py`). It trains variant B with the same budget as A, evaluates A and B on `test` and `test_cis`, and writes `results/comparison_A_vs_B.md`. Description: [docs/stage3_variant_B.md](docs/stage3_variant_B.md).
 
+## Stage 4: longer training and variant B′
+
+`run_stage4.bat` trains baseline A and variant B′ for 12 epochs each (~2 h per run on an RTX 5070), then predicts val/test/test_cis. `python scripts/run_stage4.py` evaluates both and writes `results/stage4/`. Variant B′ fixes the diagnosed problems of B: darkening is applied only to colour (daytime) frames, grayscale is dropped, and the border crop keeps clipped boxes (≥ 15 % visible) instead of leaving unlabeled animal parts. Code: `targeted_train_v2` in `src/data/transforms.py`, `border_crop_window_v2` in `src/data/box_geometry.py`, `--variant Bp` in `src/train.py`.
+
 ## Setup (local)
 
 ```bash
 pip install -r requirements.txt
 ```
+
+Runtime environment and training times: [results/environment.txt](results/environment.txt).
 
 ## Data
 
@@ -53,15 +91,36 @@ python -m src.evaluate --name "Baseline A" \
 
 The confidence threshold is chosen on val (best F1) and then fixed for test. `results/<model>/summary.md` holds mAP@0.5, mAP@[.5:.95], precision, recall, F1, false positives per empty image, image-level recall, per-class AP and per-condition recall.
 
+## Failure analysis
+
+```bash
+python scripts/failure_analysis.py --preds runs/A12_s0/preds_test.json \
+    --results results/stage4/baseline_A12 --image-dir data/raw/eccv_18_all_images_sm \
+    --out results/failure_cases
+```
+
+Prints the error taxonomy (correct / class confusion / background FP / missed) and renders
+representative failure and success cases with GT (green) and predicted (red/orange) boxes.
+
 ## Repository layout
 
 ```
-docs/        project plan sections
+docs/        project plan sections, stage reports, final technical summary
 notebooks/   Kaggle notebook: data + reference + baseline A end to end
-scripts/     data download
+scripts/     data download, stage runners, demo, failure analysis
 src/data/    split preparation, condition tagging, PyTorch dataset, box-aware transforms
 src/models/  Faster R-CNN builder
-src/         train.py, predict.py, evaluate.py, metrics.py
+src/         train.py, predict.py, evaluate.py, compare.py, metrics.py
+demo/        sample images for the live demo (from CCT20, CDLA-permissive)
 data/        raw data (ignored) and prepared splits
-results/     metrics and figures (committed; summaries: docs/stage2_baseline_results.md, docs/stage3_variant_B.md); runs/ holds checkpoints (ignored)
+results/     metrics and figures (committed); runs/ holds checkpoints (ignored)
 ```
+
+## Team
+
+| Member | Contribution |
+|---|---|
+| Sergey Peshkov | Dataset selection and preparation, leakage-free splits, condition tagging, training/evaluation pipeline, experiment runs (A, B, B′), demo, repository maintenance |
+| Arina Nikolaeva | Model and implementation specification: Faster R-CNN R50-FPN choice, pretrained weights, software stack and GPU pipeline |
+| Anton Kropotov | Experimental design: hypotheses, run configuration, metrics protocol, targeted-augmentation idea, error-analysis protocol |
+| avlaptev | Project scope and documentation: research question, boundaries, plan assembly, consistency checks |

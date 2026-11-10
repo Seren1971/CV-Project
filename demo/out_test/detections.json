@@ -1,0 +1,103 @@
+{
+ "class_confusion_5911da20-23d2-11e8-a6a3-ec086b02610b.jpg": [
+  {
+   "box": [
+    312.6,
+    486.5,
+    400.4,
+    579.5
+   ],
+   "score": 0.998,
+   "label": "rabbit"
+  },
+  {
+   "box": [
+    180.1,
+    398.9,
+    312.9,
+    570.1
+   ],
+   "score": 0.991,
+   "label": "dog"
+  }
+ ],
+ "false_positive_5871841e-23d2-11e8-a6a3-ec086b02610b.jpg": [
+  {
+   "box": [
+    365.1,
+    153.1,
+    542.9,
+    483.4
+   ],
+   "score": 0.996,
+   "label": "dog"
+  }
+ ],
+ "missed_small_58b13052-23d2-11e8-a6a3-ec086b02610b.jpg": [
+  {
+   "box": [
+    950.0,
+    579.9,
+    1023.0,
+    669.1
+   ],
+   "score": 0.856,
+   "label": "squirrel"
+  }
+ ],
+ "missed_truncated_59ef8d8c-23d2-11e8-a6a3-ec086b02610b.jpg": [],
+ "success_day_59e2a259-23d2-11e8-a6a3-ec086b02610b.jpg": [
+  {
+   "box": [
+    42.2,
+    345.2,
+    190.0,
+    465.8
+   ],
+   "score": 0.883,
+   "label": "coyote"
+  },
+  {
+   "box": [
+    105.8,
+    401.2,
+    287.7,
+    511.8
+   ],
+   "score": 0.842,
+   "label": "coyote"
+  },
+  {
+   "box": [
+    183.3,
+    333.5,
+    360.2,
+    423.5
+   ],
+   "score": 0.823,
+   "label": "coyote"
+  }
+ ],
+ "success_night_5a27d9ff-23d2-11e8-a6a3-ec086b02610b.jpg": [
+  {
+   "box": [
+    11.1,
+    352.7,
+    244.9,
+    654.8
+   ],
+   "score": 0.999,
+   "label": "coyote"
+  },
+  {
+   "box": [
+    131.6,
+    330.0,
+    286.4,
+    541.5
+   ],
+   "score": 0.945,
+   "label": "coyote"
+  }
+ ]
+}

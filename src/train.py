@@ -27,12 +27,12 @@ import torch
 from torch.utils.data import DataLoader, Subset
 
 from src.data.dataset import CCT20Detection
-from src.data.transforms import baseline_train, eval_transform, targeted_train
+from src.data.transforms import baseline_train, eval_transform, targeted_train, targeted_train_v2
 from src.metrics import coco_map
 from src.models.detector import build_model, set_train_size
 from src.predict import collate, run_inference
 
-TRANSFORMS = {"A": baseline_train, "B": targeted_train}
+TRANSFORMS = {"A": baseline_train, "B": targeted_train, "Bp": targeted_train_v2}
 
 
 def set_seed(seed: int):

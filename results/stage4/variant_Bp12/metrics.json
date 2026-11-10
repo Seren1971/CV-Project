@@ -1,0 +1,48 @@
+{
+ "name": "Variant B' (12 epochs)",
+ "test_split": "test",
+ "class_aware": {
+  "threshold_from_val": 0.9,
+  "images": 5842,
+  "animal_images": 5240,
+  "empty_images": 602,
+  "precision": 0.821253546556616,
+  "recall": 0.5689778413152251,
+  "f1": 0.672226327456983,
+  "fp_per_empty_image": 0.11461794019933555,
+  "empty_images_with_fp": 0.10631229235880399,
+  "image_recall": 0.5874045801526717,
+  "map50": 0.6088713660076288,
+  "map": 0.3682260198594591,
+  "ap50_per_class": {
+   "bird": 0.14418771848969078,
+   "bobcat": 0.6928725933142098,
+   "cat": 0.3765610082449401,
+   "coyote": 0.8122836268935325,
+   "dog": 0.7739669749284355,
+   "opossum": 0.9130684470134303,
+   "rabbit": 0.7553030895755075,
+   "raccoon": 0.8183978275308585,
+   "rodent": 0.04379147592178572,
+   "skunk": 0.8657800519517219,
+   "squirrel": 0.5013722122198044
+  }
+ },
+ "agnostic": {
+  "threshold_from_val": 0.7,
+  "images": 5842,
+  "animal_images": 5240,
+  "empty_images": 602,
+  "precision": 0.8273475495697717,
+  "recall": 0.790385989992852,
+  "f1": 0.8084445256808627,
+  "fp_per_empty_image": 0.23255813953488372,
+  "empty_images_with_fp": 0.2009966777408638,
+  "image_recall": 0.8024809160305344,
+  "map50": 0.8367174938150027,
+  "map": 0.5011950662646841,
+  "ap50_per_class": {
+   "animal": 0.8367174938150027
+  }
+ }
+}

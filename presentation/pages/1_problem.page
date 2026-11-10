@@ -1,0 +1,103 @@
+pageType: cover
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+  - elementId: topbar
+    elementType: shape
+    bounds: [0, 0, 960, 6]
+    shapeName: rect
+    fill: {type: solid, color: "$primary"}
+  - elementId: title
+    elementType: text
+    bounds: [40, 24, 880, 44]
+    content:
+      style: "$title"
+      wrap: false
+      text: |
+        <p>P16 — Wildlife Detection in Camera-Trap Images</p>
+  - elementId: subtitle
+    elementType: text
+    bounds: [40, 66, 880, 20]
+    content:
+      style: "$small"
+      wrap: false
+      text: |
+        <p>Computer Vision 2026 · Sergey Peshkov, Arina Nikolaeva, Anton Kropotov, avlaptev · <a href="https://github.com/Seren1971/CV-Project">github.com/Seren1971/CV-Project</a></p>
+  - elementId: obj-h
+    elementType: text
+    bounds: [40, 100, 470, 22]
+    content:
+      style: "$h2"
+      wrap: false
+      text: |
+        <p>Objective and research question</p>
+  - elementId: obj-t
+    elementType: text
+    bounds: [40, 124, 470, 88]
+    content:
+      style: "$body"
+      text: |
+        <p>Find and classify animals on <strong>camera locations never seen in training</strong> — the setting in which camera traps are actually deployed.</p>
+        <p style="margin-top:6px">Controlled question: does augmentation <strong>targeted at the observed failure conditions</strong> beat standard augmentation at an equal training budget?</p>
+  - elementId: data-h
+    elementType: text
+    bounds: [40, 222, 470, 22]
+    content:
+      style: "$h2"
+      wrap: false
+      text: |
+        <p>Dataset: CCT20 (Caltech Camera Traps)</p>
+  - elementId: data-t
+    elementType: text
+    bounds: [40, 246, 470, 108]
+    content:
+      style: "$body"
+      text: |
+        <ul>
+        <li>11 animal classes (≥ 100 train images each), empty frames kept to measure false alarms</li>
+        <li>train 11,382 img (10 locations) · val 2,148 · <strong>test 5,842 (9 new locations)</strong> · test_cis 6,076 (seen)</li>
+        <li>Leakage control: whole bursts in one split; test locations disjoint from train; 270 val frames dropped after our burst-cut check</li>
+        <li>Auto tags per test image: night IR / dark / small (&lt;1% area) / truncated at border</li>
+        </ul>
+  - elementId: meth-h
+    elementType: text
+    bounds: [40, 364, 470, 22]
+    content:
+      style: "$h2"
+      wrap: false
+      text: |
+        <p>Method: one detector, four training conditions</p>
+  - elementId: meth-t
+    elementType: text
+    bounds: [40, 388, 470, 130]
+    content:
+      style: "$body"
+      text: |
+        <ul>
+        <li>Faster R-CNN R50-FPN, COCO weights; SGD + cosine, batch 4, seed 0; threshold = best F1 on val, fixed for test</li>
+        <li><strong>Reference</strong>: untrained COCO model, class-agnostic</li>
+        <li><strong>A</strong>: standard augmentation (flip, colour jitter), 6 and 12 epochs</li>
+        <li><strong>B</strong>: A + targeted transforms (border crop, partial erase, darken, grayscale), 6 ep</li>
+        <li><strong>B′</strong>: B fixed — darken only colour frames, no grayscale, clipped boxes kept; 12 ep</li>
+        </ul>
+  - elementId: img-day
+    elementType: image
+    bounds: [530, 100, 390, 205]
+    src: media/success_day.jpg
+    fit: {mode: cover}
+    border: {style: solid, width: 1, color: "#D5DDD8"}
+  - elementId: img-night
+    elementType: image
+    bounds: [530, 313, 390, 205]
+    src: media/success_night.jpg
+    fit: {mode: cover}
+    border: {style: solid, width: 1, color: "#D5DDD8"}
+  - elementId: img-cap
+    elementType: text
+    bounds: [530, 304, 390, 14]
+    content:
+      style: "$small"
+      wrap: false
+      text: |
+        <p>Final model (B′, 12 ep) on test images — day and night IR. Green: ground truth, red: predictions.</p>
