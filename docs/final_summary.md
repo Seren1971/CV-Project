@@ -58,6 +58,6 @@ Repo: github.com/Seren1971/CV-Project — README with exact commands, `requireme
 - **Sergey Peshkov** — dataset selection and preparation, leakage-free splits, condition tagging, training/evaluation pipeline, experiment runs (A, B, B′), failure-case rendering, demo, repository.
 - **Arina Nikolaeva** — model and implementation specification: Faster R-CNN R50-FPN choice, pretrained weights, software stack and GPU pipeline.
 - **Anton Kropotov** — experimental design: hypotheses, run configuration table, metrics protocol, targeted-augmentation idea, error-analysis protocol.
-- **avlaptev** — project scope and documentation: research question, boundaries, plan assembly and consistency checks.
+- **Arseniy Laptev** — project scope and documentation: research question, boundaries, plan assembly and consistency checks.
 
 All members reviewed the integrated plan and prepared to explain model choice, metrics, results and failure cases individually.

@@ -23,7 +23,7 @@ elements:
       style: "$small"
       wrap: false
       text: |
-        <p>Computer Vision 2026 · Sergey Peshkov, Arina Nikolaeva, Anton Kropotov, avlaptev · <a href="https://github.com/Seren1971/CV-Project">github.com/Seren1971/CV-Project</a></p>
+        <p>Computer Vision 2026 · Sergey Peshkov, Arina Nikolaeva, Anton Kropotov, Arseniy Laptev · <a href="https://github.com/Seren1971/CV-Project">github.com/Seren1971/CV-Project</a></p>
   - elementId: obj-h
     elementType: text
     bounds: [40, 100, 470, 22]

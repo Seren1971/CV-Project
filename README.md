@@ -136,4 +136,4 @@ results/     metrics and figures (committed); runs/ holds checkpoints (ignored)
 | Sergey Peshkov | Dataset selection and preparation, leakage-free splits, condition tagging, training/evaluation pipeline, experiment runs (A, B, B′), demo, repository maintenance |
 | Arina Nikolaeva | Model and implementation specification: Faster R-CNN R50-FPN choice, pretrained weights, software stack and GPU pipeline |
 | Anton Kropotov | Experimental design: hypotheses, run configuration, metrics protocol, targeted-augmentation idea, error-analysis protocol |
-| avlaptev | Project scope and documentation: research question, boundaries, plan assembly, consistency checks |
+| Arseniy Laptev | Project scope and documentation: research question, boundaries, plan assembly, consistency checks |
